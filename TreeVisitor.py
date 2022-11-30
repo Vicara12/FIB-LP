@@ -28,12 +28,12 @@ class TreeVisitor(FunxVisitor):
         l = list(ctx.getChildren())
         val_l = self.visit(l[0])
         val_r = self.visit(l[2])
-        if l[1] == '*':
+        if l[1].getText() == '*':
             return val_l * val_r
         elif val_r != 0:
             return val_l / val_r
         else:
-            expr = [x.getText() for x in l].join("")
+            expr = "".join([x.getText() for x in l])
             print("ERROR: division by zero at expr {}".format(expr))
             return None
 
@@ -41,7 +41,7 @@ class TreeVisitor(FunxVisitor):
         l = list(ctx.getChildren())
         val_l = self.visit(l[0])
         val_r = self.visit(l[2])
-        if l[1] == '+':
+        if l[1].getText() == '+':
             return val_l + val_r
         else:
             return val_l - val_r
