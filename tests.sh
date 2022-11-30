@@ -8,12 +8,14 @@ echo " ~~~~ RUNNING TESTS ~~~~"
 for f in ./tests/*.funx
 do
     res=$(./funx.py $f)
-    corr=$(cat $f | head -1 | sed 's/#//g')
+    corr=$(cat $f | grep \# | sed 's/#//g')
 
     if [[ $res = $corr ]]; then
         echo " - Test OK: $f"
     else
-        echo " - Test FAILED: $f (expected: $corr   got: $res)"
+        echo " - Test FAILED: $f"
+        echo "      * Expected: $corr"
+        echo "      * Result:   $res"
         all_ok="no"
     fi
 done
