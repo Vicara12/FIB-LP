@@ -2,8 +2,12 @@ grammar Funx;
 
 root : statement* ;
 
-statement : (while | expr | booleanexpr | varassig) ;
+statement : (conditional | while | expr | booleanexpr | varassig) ;
 
+conditional : if elseif* else? ;
+if : IF booleanexpr '{' statement* '}' ;
+elseif : ELSEIF booleanexpr '{' statement* '}' ;
+else : ELSE '{' statement* '}' ;
 
 while : WHILE booleanexpr '{' statement* '}' ;
 
@@ -47,6 +51,9 @@ DIF : '!=' ;
 WHILE : 'while' ;
 TRUE : 'True' ;
 FALSE : 'False' ;
+IF : 'if' ;
+ELSEIF : 'elseif' ;
+ELSE : 'else' ;
 VARNAME : [a-z] [a-zA-Z0-9]* ;
 COMMENT : '#' (~[\n])* '\n' -> skip;
 WS : [ \t\n]+ -> skip ;

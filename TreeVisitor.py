@@ -15,6 +15,39 @@ class TreeVisitor(FunxVisitor):
         for i in l:
             res = self.visit(i)
 
+    def visitConditional (self, ctx):
+        l = list(ctx.getChildren())
+        # for each if, elseif or else statement
+        for condition in l:
+            # if the condition is true, skip the others
+            if self.visit(condition):
+                return
+
+    def visitIf (self, ctx):
+        l = list(ctx.getChildren())
+        if self.visit(l[1]):
+            for x in l[3:-1]:
+                self.visit(x)
+            # return true to let the conditional statement
+            # know that this condition was met
+            return True
+        return False
+
+    def visitElseif (self, ctx):
+        l = list(ctx.getChildren())
+        if self.visit(l[1]):
+            for x in l[3:-1]:
+                self.visit(x)
+            # same as if
+            return True
+        return False
+
+    def visitElse (self, ctx):
+        l = list(ctx.getChildren())
+        for x in l[2:-1]:
+            self.visit(x)
+        return True
+
     def visitStatement (self, ctx):
         l = list(ctx.getChildren())
         if len(l) > 1:
