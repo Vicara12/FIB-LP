@@ -14,8 +14,74 @@ class TreeVisitor(FunxVisitor):
         l = list(ctx.getChildren())
         for i in l:
             res = self.visit(i)
-            if res is not None:
-                print(res)
+
+    def visitStatement (self, ctx):
+        l = list(ctx.getChildren())
+        if len(l) > 1:
+            print("LANGUAGE ERROR: non atomic statement")
+        res = self.visit(l[0])
+        if res is not None:
+            print(res)
+
+    def visitBVariable (self, ctx):
+        l = list(ctx.getChildren())
+        return self.contexts[-1][l[0].getText()]
+
+    def visitBParentheses (self, ctx):
+        l = list(ctx.getChildren())
+        return self.visit(l[1])
+
+    def visitNot (self, ctx):
+        l = list(ctx.getChildren())
+        return not self.visit(l[0])
+
+    def visitAnd (self, ctx):
+        l = list(ctx.getChildren())
+        return self.visit(l[0]) and self.visit(l[2])
+
+    def visitOr (self, ctx):
+        l = list(ctx.getChildren())
+        return self.visit(l[0]) or self.visit(l[2])
+
+    def visitComparison (self, ctx):
+        l = list(ctx.getChildren())
+
+        if l[1].getText() == '>':
+            return self.visit(l[0]) > self.visit(l[2])
+        elif l[1].getText() == '>=':
+            return self.visit(l[0]) >= self.visit(l[2])
+        elif l[1].getText() == '<':
+            return self.visit(l[0]) < self.visit(l[2])
+        elif l[1].getText() == '<=':
+            return self.visit(l[0]) <= self.visit(l[2])
+        elif l[1].getText() == '=':
+            return self.visit(l[0]) == self.visit(l[2])
+        elif l[1].getText() == '!=':
+            return self.visit(l[0]) != self.visit(l[2])
+        else:
+            print("LANGUAJE ERROR: unknown symbol {}".format(l[1].getText()))
+
+    def visitExprToBool (self, ctx):
+        l = list(ctx.getChildren())
+        res = self.visit(l[0])
+        return res != 0
+
+    def visitTrue (self, ctx):
+        return True
+
+    def visitFalse (self, ctx):
+        return False
+
+    def visitWhile (self, ctx):
+        l = list(ctx.getChildren())
+        while self.visit(l[1]):
+            for x in l[3:-1]:
+                self.visit(x)
+
+    def visitPrint (self, ctx):
+        l = list(ctx.getChildren())
+        for item in l[1:-2]:
+            print(item.getSymbol().type)
 
     def visitVarassig (self, ctx):
         l = list(ctx.getChildren())

@@ -1,0 +1,14 @@
+#14
+#105
+
+i <- 0
+sum <- 0
+
+while i < 100 and sum < 100 {
+    i <- i+1
+    last <- i
+    sum <- sum + i
+}
+
+last
+sum

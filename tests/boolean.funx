@@ -1,0 +1,27 @@
+#True
+#False
+#True
+#True
+#True
+#True
+#True
+#False
+#False
+#True
+#True
+#True
+
+var <- 3
+var > 0
+1 < 1
+1 > 0
+1 >= 1
+2 <= 3
+2 = 2
+True and True
+True and False
+False or False
+not False or True
+True and (False or True)
+v <- True
+v

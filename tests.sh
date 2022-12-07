@@ -16,6 +16,7 @@ do
         echo " - Test FAILED: $f"
         echo "      * Expected: $corr"
         echo "      * Result:   $res"
+        echo
         all_ok="no"
     fi
 done
