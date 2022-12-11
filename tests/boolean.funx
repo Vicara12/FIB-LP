@@ -1,15 +1,15 @@
-#True
-#False
-#True
-#True
-#True
-#True
-#True
-#False
-#False
-#True
-#True
-#True
+##Out: True
+##Out: False
+##Out: True
+##Out: True
+##Out: True
+##Out: True
+##Out: True
+##Out: False
+##Out: False
+##Out: True
+##Out: True
+##Out: True
 
 var <- 3
 var > 0

@@ -1,2 +1,2 @@
-#ERROR: division by zero at expr 10/(4-2*2)
+## ERROR: division by zero at expr 10/(4-2*2)
 10/(4-2*2)

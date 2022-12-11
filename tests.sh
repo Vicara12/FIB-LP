@@ -8,7 +8,7 @@ echo " ~~~~ RUNNING TESTS ~~~~"
 for f in ./tests/*.funx
 do
     res=$(./funx.py $f)
-    corr=$(cat $f | grep \# | sed 's/#//g')
+    corr=$(cat $f | sed 's/# /#/g' | grep \#\# | sed 's/#//g')
 
     if [[ $res = $corr ]]; then
         echo " - Test OK: $f"

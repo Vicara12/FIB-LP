@@ -1,15 +1,27 @@
 grammar Funx;
 
+
 root : statement* ;
 
-statement : (conditional | while | expr | booleanexpr | varassig) ;
+
+statement : silentStmt ;
+silentStmt : (print | funcall | function | conditional | while | expr | booleanexpr | varassig);
+
 
 conditional : if elseif* else? ;
 if : IF booleanexpr '{' statement* '}' ;
 elseif : ELSEIF booleanexpr '{' statement* '}' ;
 else : ELSE '{' statement* '}' ;
 
+
+function : FUNCNAME VARNAME* '{' silentStmt* '}' ;
+funcall : FUNCNAME expr* ';'?;
+
+print : PRINT (TEXT | expr | booleanexpr)* ';' ;
+
+
 while : WHILE booleanexpr '{' statement* '}' ;
+
 
 expr : '(' expr ')'                 # Parentheses
     | <assoc=right> expr POW expr   # Power
@@ -17,7 +29,9 @@ expr : '(' expr ')'                 # Parentheses
     | expr (PLUS | MINUS) expr      # PlusMinus
     | NUM                           # Number
     | VARNAME                       # Variable
+    | funcall                       # ExprFuncall
     ;
+
 
 booleanexpr : '(' booleanexpr ')'   # BParentheses
     | NOT booleanexpr               # Not
@@ -30,7 +44,9 @@ booleanexpr : '(' booleanexpr ')'   # BParentheses
     | VARNAME                       # BVariable
     ;
 
+
 varassig : VARNAME '<-' (expr | booleanexpr) ;
+
 
 NUM : [0-9]+ ;
 PLUS : '+' ;
@@ -48,6 +64,7 @@ LT : '<' ;
 LET : '<=' ;
 EQ : '=' ;
 DIF : '!=' ;
+PRINT : 'print' ;
 WHILE : 'while' ;
 TRUE : 'True' ;
 FALSE : 'False' ;
@@ -55,5 +72,7 @@ IF : 'if' ;
 ELSEIF : 'elseif' ;
 ELSE : 'else' ;
 VARNAME : [a-z] [a-zA-Z0-9]* ;
+FUNCNAME : [A-Z] [a-zA-Z0-9]* ;
+TEXT : '"' (~["])* '"' ;
 COMMENT : '#' (~[\n])* '\n' -> skip;
 WS : [ \t\n]+ -> skip ;

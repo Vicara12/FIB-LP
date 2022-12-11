@@ -9,11 +9,16 @@ class TreeVisitor(FunxVisitor):
     def __init__(self):
         self.nivell = 0
         self.contexts = [{}]
+        # functions is a dictionary where the key is
+        # the function name and number of arguments of
+        # the function and the value is the argument names
+        # and code
+        self.functions = {}
 
     def visitRoot (self, ctx):
         l = list(ctx.getChildren())
         for i in l:
-            res = self.visit(i)
+            self.visit(i)
 
     def visitConditional (self, ctx):
         l = list(ctx.getChildren())
@@ -42,6 +47,75 @@ class TreeVisitor(FunxVisitor):
             return True
         return False
 
+    def visitExprFuncall (self, ctx):
+        l = list(ctx.getChildren())
+        return self.visit(l[0])
+
+    def visitFunction (self, ctx):
+        l = list(ctx.getChildren())
+        fname = l[0].getText()
+        # get list of parameter names and function code
+        texts = [x.getText() for x in l]
+        params = []
+        code = []
+        parsing_params = True
+        for elm in l[1:-1]:
+            t = elm.getText()
+            if t == '{':
+                parsing_params = False
+                continue
+            if parsing_params:
+                params.append(t)
+            else:
+                code.append(elm)
+        # check that all parameters are different
+        if len(params) != len(set(params)):
+            print("ERROR: repeated parameter names at function {}".format(fname))
+            return
+
+        key = (fname, len(params))
+        if key in self.functions.keys():
+            print("ERROR: a version of the function {} with {} parameters already exists".format(fname, len(params)))
+            return
+        self.functions[key] = (params,code)
+
+    def visitPrint (self, ctx):
+        l = list(ctx.getChildren())
+        for item in l[1:-1]:
+            txt = item.getText()
+            if txt[0] == '"':
+                print(txt[1:-1],end='')
+            else:
+                res = self.visit(item)
+                print(res,end='')
+        print()
+
+    def visitFuncall (self, ctx):
+        l = list(ctx.getChildren())
+        fname = l[0].getText()
+        params = [self.visit(param) for param in l[1:-1]]
+
+        key = (fname, len(params))
+        if key not in self.functions.keys():
+            print("ERROR: function {} with {} parameters not found".format(fname, len(params)))
+            return
+
+        # generate new context with function variables
+        function = self.functions[key]
+        new_context = {}
+        for i in range(key[1]):
+            new_context[function[0][i]] = params[i]
+        self.contexts.append(new_context)
+
+        # execute function code until something returns a
+        # value that is not none, otherwise return none
+        for code_item in function[1]:
+            val = self.visit(code_item)
+            if val is not None:
+                self.contexts.pop(-1)
+                return val
+        self.contexts.pop(-1)
+
     def visitElse (self, ctx):
         l = list(ctx.getChildren())
         for x in l[2:-1]:
@@ -54,7 +128,15 @@ class TreeVisitor(FunxVisitor):
             print("LANGUAGE ERROR: non atomic statement")
         res = self.visit(l[0])
         if res is not None:
-            print(res)
+            print("Out: {}".format(res))
+        return res
+
+    def visitSilentStmt (self, ctx):
+        l = list(ctx.getChildren())
+        if len(l) > 1:
+            print("LANGUAGE ERROR: non atomic statement")
+        res = self.visit(l[0])
+        return res
 
     def visitBVariable (self, ctx):
         l = list(ctx.getChildren())
@@ -110,11 +192,6 @@ class TreeVisitor(FunxVisitor):
         while self.visit(l[1]):
             for x in l[3:-1]:
                 self.visit(x)
-
-    def visitPrint (self, ctx):
-        l = list(ctx.getChildren())
-        for item in l[1:-2]:
-            print(item.getSymbol().type)
 
     def visitVarassig (self, ctx):
         l = list(ctx.getChildren())

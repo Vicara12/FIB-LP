@@ -1,0 +1,17 @@
+## Hi
+##
+## The value of x is 12 :)
+## Multiline
+## print
+## 2+2 is 4
+## Checking bool: True
+
+x <- 12
+
+print "Hi" ;
+print;
+print "The value of x is " x " :)" ;
+print "Multiline
+print" ;
+print "2+2 is " 2+2 ;
+print "Checking bool: " x<13 ;

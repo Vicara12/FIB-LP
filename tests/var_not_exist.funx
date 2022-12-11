@@ -1,4 +1,4 @@
-#4
-#ERROR: unkwown variable name "uKnowMe123"
+## Out: 4
+## ERROR: unkwown variable name "uKnowMe123"
 2+2
 uKnowMe123
