@@ -1,28 +1,24 @@
-Fact n {
-    i <- 1
-    res <- 1
-
-    while i <= n {
-        res <- res*i
-        i <- i+1
-    }
-    res
-}
 
 Num {
     12
 }
 
-Fact2 n {
+Num a {
+    42
+}
+
+Fact n {
     if n < 2 {
         val <- 1
     } else {
-        val <- n*(Fact2 n-1;)
+        val <- n*(Fact n-1)
     }
     val
 }
 
-Fact2 5;
+Num;
+Num 12;
+Fact 5;
 
 #Fact 5
 #Fact2 5 ;

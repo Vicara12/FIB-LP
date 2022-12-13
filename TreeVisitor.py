@@ -93,7 +93,10 @@ class TreeVisitor(FunxVisitor):
     def visitFuncall (self, ctx):
         l = list(ctx.getChildren())
         fname = l[0].getText()
-        params = [self.visit(param) for param in l[1:-1]]
+        if l[-1].getText() == ';':
+            params = [self.visit(param) for param in l[1:-1]]
+        else:
+            params = [self.visit(param) for param in l[1:]]
 
         key = (fname, len(params))
         if key not in self.functions.keys():
