@@ -4,8 +4,7 @@ grammar Funx;
 root : statement* ;
 
 
-statement : silentStmt ;
-silentStmt : (print | funcall | function | conditional | while | expr | booleanexpr | varassig);
+statement : (print | funcall | function | conditional | while | expr | booleanexpr | varassig);
 
 
 conditional : if elseif* else? ;
@@ -14,7 +13,7 @@ elseif : ELSEIF booleanexpr '{' statement* '}' ;
 else : ELSE '{' statement* '}' ;
 
 
-function : FUNCNAME VARNAME* '{' silentStmt* '}' ;
+function : FUNCNAME VARNAME* '{' statement* '}' ;
 funcall : FUNCNAME expr* ';'?;
 
 print : PRINT (TEXT | expr | booleanexpr)* ';' ;

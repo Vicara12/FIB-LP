@@ -1,24 +1,63 @@
+## Out: 12
+## Out: 42
+## Out: 120
+## Out: 10
+## Out: 8
+## Out: 6
+## Out: 5
 
 Num {
     12
 }
 
+
 Num a {
     42
 }
 
+
+Suma x y
+{
+    x + y
+}
+
+
 Fact n {
     if n < 2 {
-        val <- 1
+        1
     } else {
-        val <- n*(Fact n-1)
+        n*(Fact n-1)
     }
-    val
 }
+
+
+Fibo n
+{
+    if n < 2 { n }
+    (Fibo n-1) + (Fibo n-2)
+}
+
+Euclides a b
+{
+    while a != b {
+        if a > b {
+            a <- a - b
+        } else {
+            b <- b - a
+        }
+    }
+    a
+}
+
 
 Num;
 Num 12;
 Fact 5;
+Suma (2 * 3) 4;
+Fibo 6;
+Euclides 546 330;
 
-#Fact 5
-#Fact2 5 ;
+
+DOS { 2 }
+Suma2 x { DOS + x }
+Suma2 3

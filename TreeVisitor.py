@@ -14,6 +14,12 @@ class TreeVisitor(FunxVisitor):
         # the function and the value is the argument names
         # and code
         self.functions = {}
+        # if the program is executing a function things like
+        # conditionals or while loops should return the first
+        # thing that return a value that they encounter, whereas
+        # in the main code conditionals and loops do not return
+        # anything
+        self.infunction = False
 
     def visitRoot (self, ctx):
         l = list(ctx.getChildren())
@@ -25,27 +31,33 @@ class TreeVisitor(FunxVisitor):
         # for each if, elseif or else statement
         for condition in l:
             # if the condition is true, skip the others
-            if self.visit(condition):
-                return
+            true_cond, value = self.visit(condition)
+            if true_cond:
+                return value
+        return None
 
     def visitIf (self, ctx):
         l = list(ctx.getChildren())
         if self.visit(l[1]):
             for x in l[3:-1]:
-                self.visit(x)
+                val = self.visit(x)
+                if self.infunction and val is not None:
+                    return True, val
             # return true to let the conditional statement
             # know that this condition was met
-            return True
-        return False
+            return True, None
+        return False, None
 
     def visitElseif (self, ctx):
         l = list(ctx.getChildren())
         if self.visit(l[1]):
             for x in l[3:-1]:
-                self.visit(x)
+                val = self.visit(x)
+                if self.infunction and val is not None:
+                    return True, val
             # same as if
-            return True
-        return False
+            return True, None
+        return False, None
 
     def visitExprFuncall (self, ctx):
         l = list(ctx.getChildren())
@@ -112,33 +124,32 @@ class TreeVisitor(FunxVisitor):
 
         # execute function code until something returns a
         # value that is not none, otherwise return none
+        old_inf = self.infunction
+        self.infunction = True
         for code_item in function[1]:
             val = self.visit(code_item)
             if val is not None:
                 self.contexts.pop(-1)
+                self.infunction = old_inf
                 return val
+        self.infunction = old_inf
         self.contexts.pop(-1)
 
     def visitElse (self, ctx):
         l = list(ctx.getChildren())
         for x in l[2:-1]:
-            self.visit(x)
-        return True
+            val = self.visit(x)
+            if self.infunction and val is not None:
+                return True, val
+        return True, None
 
     def visitStatement (self, ctx):
         l = list(ctx.getChildren())
         if len(l) > 1:
             print("LANGUAGE ERROR: non atomic statement")
         res = self.visit(l[0])
-        if res is not None:
+        if not self.infunction and res is not None:
             print("Out: {}".format(res))
-        return res
-
-    def visitSilentStmt (self, ctx):
-        l = list(ctx.getChildren())
-        if len(l) > 1:
-            print("LANGUAGE ERROR: non atomic statement")
-        res = self.visit(l[0])
         return res
 
     def visitBVariable (self, ctx):
@@ -194,7 +205,9 @@ class TreeVisitor(FunxVisitor):
         l = list(ctx.getChildren())
         while self.visit(l[1]):
             for x in l[3:-1]:
-                self.visit(x)
+                res = self.visit(x)
+                if self.infunction and res is not None:
+                    return res
 
     def visitVarassig (self, ctx):
         l = list(ctx.getChildren())
