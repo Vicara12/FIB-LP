@@ -20,9 +20,14 @@ class TreeVisitor(FunxVisitor):
         # in the main code conditionals and loops do not return
         # anything
         self.infunction = False
+        self.parsing_functions = True
 
     def visitRoot (self, ctx):
         l = list(ctx.getChildren())
+        self.parsing_functions = True
+        for i in l:
+            self.visit(i)
+        self.parsing_functions = False
         for i in l:
             self.visit(i)
 
@@ -64,6 +69,10 @@ class TreeVisitor(FunxVisitor):
         return self.visit(l[0])
 
     def visitFunction (self, ctx):
+        # avoid visiting this element if not parsing functions
+        # as functions were already parsed at the beginning
+        if not self.parsing_functions:
+            return
         l = list(ctx.getChildren())
         fname = l[0].getText()
         # get list of parameter names and function code
@@ -141,6 +150,10 @@ class TreeVisitor(FunxVisitor):
         return True, None
 
     def visitStatement (self, ctx):
+        # if this is not a function declaration, ignore it
+        # when parsing functions
+        if self.parsing_functions:
+            return
         l = list(ctx.getChildren())
         if len(l) > 1:
             raise Exception("LANGUAGE ERROR: non atomic statement")

@@ -5,6 +5,7 @@
 ## Out: 8
 ## Out: 6
 ## Out: 5
+## Out: 127
 
 Num {
     12
@@ -60,4 +61,10 @@ Euclides 546 330;
 
 DOS { 2 }
 Suma2 x { DOS + x }
-Suma2 3
+Suma2 3;
+
+FinalFunc
+
+FinalFunc {
+    127
+}

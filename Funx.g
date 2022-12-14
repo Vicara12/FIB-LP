@@ -1,10 +1,10 @@
 grammar Funx;
 
 
-root : statement* ;
+root : (statement | function)* ;
 
 
-statement : (print | funcall | function | conditional | while | expr | booleanexpr | varassig);
+statement : (print | funcall | conditional | while | expr | booleanexpr | varassig);
 
 
 conditional : if elseif* else? ;
