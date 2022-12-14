@@ -1,0 +1,11 @@
+## ERROR: a version of the function Foo with 1 parameters already exists
+
+Foo a {
+    12
+}
+
+Foo b {
+    15
+}
+
+Foo 1;

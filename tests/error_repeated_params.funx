@@ -1,0 +1,7 @@
+## ERROR: repeated parameter names at function Foo
+
+Foo a b a {
+    42
+}
+
+Foo 1 2 3;

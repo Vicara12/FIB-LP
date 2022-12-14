@@ -44,6 +44,8 @@ That is the result of adding the first 100 numbers
 
 #### Arithmetic expressions
 
+div0 powNeg
+
 #### Boolean expressions
 
 expressions are also booleans
@@ -61,6 +63,10 @@ print can be multiline
 ;
 
 ### Functions
+
+overload
+declared in any order
+declared only at main
 
 ## Test units
 

@@ -1,0 +1,4 @@
+## ERROR: negative powers are undefined in expr 2^var
+
+var <- -1
+var <- 2^var

@@ -233,7 +233,8 @@ class TreeVisitor(FunxVisitor):
         val_l = self.visit(l[0])
         val_r = self.visit(l[2])
         if val_r < 0:
-            raise Exception("ERROR: negative powers are undefined")
+            expr = "".join([x.getText() for x in l])
+            raise Exception("ERROR: negative powers are undefined in expr {}".format(expr))
         return val_l**val_r
 
     def visitMultDivMod (self, ctx):

@@ -1,0 +1,7 @@
+## ERROR: function Foo with 2 parameters not found
+
+Foo a {
+    12
+}
+
+Foo 1 2;

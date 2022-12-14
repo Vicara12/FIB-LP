@@ -1,0 +1,4 @@
+## ERROR: division by zero at expr 10/var
+
+var <- 0
+var <- 10/var
