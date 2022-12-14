@@ -53,6 +53,7 @@ expressions are also booleans
 ### Assignations and variables
 
 Visibility, errors and names
+name conventions
 
 ### Conditionals
 
@@ -64,6 +65,7 @@ print can be multiline
 
 ### Functions
 
+name convention
 overload
 declared in any order
 declared only at main
