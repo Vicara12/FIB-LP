@@ -26,6 +26,7 @@ expr : '(' expr ')'                 # Parentheses
     | <assoc=right> expr POW expr   # Power
     | expr (MULT | DIV | MOD) expr  # MultDivMod
     | expr (PLUS | MINUS) expr      # PlusMinus
+    | '-' expr                      # Negative
     | NUM                           # Number
     | VARNAME                       # Variable
     | funcall                       # ExprFuncall

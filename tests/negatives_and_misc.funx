@@ -1,0 +1,26 @@
+## Out: 4950
+## That is the result of adding the first 100 numbers
+
+Sum a b {
+    a + b
+}
+
+sum <- 0
+i <- -10
+
+while i < 100 and sum >= 0 {
+    if i < 0 {
+        i <- i+1
+    }
+    elseif i < 100 {
+        sum <- (Sum sum i)
+        i <- i+1
+    }
+    else {
+        print "This should not happen";
+    }
+}
+
+sum
+
+print "That is the result of adding the first " i " numbers";

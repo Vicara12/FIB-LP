@@ -82,13 +82,11 @@ class TreeVisitor(FunxVisitor):
                 code.append(elm)
         # check that all parameters are different
         if len(params) != len(set(params)):
-            print("ERROR: repeated parameter names at function {}".format(fname))
-            return
+            raise Exception("ERROR: repeated parameter names at function {}".format(fname))
 
         key = (fname, len(params))
         if key in self.functions.keys():
-            print("ERROR: a version of the function {} with {} parameters already exists".format(fname, len(params)))
-            return
+            raise Exception("ERROR: a version of the function {} with {} parameters already exists".format(fname, len(params)))
         self.functions[key] = (params,code)
 
     def visitPrint (self, ctx):
@@ -112,8 +110,7 @@ class TreeVisitor(FunxVisitor):
 
         key = (fname, len(params))
         if key not in self.functions.keys():
-            print("ERROR: function {} with {} parameters not found".format(fname, len(params)))
-            return
+            raise Exception("ERROR: function {} with {} parameters not found".format(fname, len(params)))
 
         # generate new context with function variables
         function = self.functions[key]
@@ -146,7 +143,7 @@ class TreeVisitor(FunxVisitor):
     def visitStatement (self, ctx):
         l = list(ctx.getChildren())
         if len(l) > 1:
-            print("LANGUAGE ERROR: non atomic statement")
+            raise Exception("LANGUAGE ERROR: non atomic statement")
         res = self.visit(l[0])
         if not self.infunction and res is not None:
             print("Out: {}".format(res))
@@ -188,7 +185,7 @@ class TreeVisitor(FunxVisitor):
         elif l[1].getText() == '!=':
             return self.visit(l[0]) != self.visit(l[2])
         else:
-            print("LANGUAJE ERROR: unknown symbol {}".format(l[1].getText()))
+            raise Exception("LANGUAGE ERROR: unknown symbol {}".format(l[1].getText()))
 
     def visitExprToBool (self, ctx):
         l = list(ctx.getChildren())
@@ -222,6 +219,8 @@ class TreeVisitor(FunxVisitor):
         l = list(ctx.getChildren())
         val_l = self.visit(l[0])
         val_r = self.visit(l[2])
+        if val_r < 0:
+            raise Exception("ERROR: negative powers are undefined")
         return val_l**val_r
 
     def visitMultDivMod (self, ctx):
@@ -237,8 +236,11 @@ class TreeVisitor(FunxVisitor):
                 return val_l % val_r
         else:
             expr = "".join([x.getText() for x in l])
-            print("ERROR: division by zero at expr {}".format(expr))
-            exit(1)
+            raise Exception("ERROR: division by zero at expr {}".format(expr))
+
+    def visitNegative (self, ctx):
+        l = list(ctx.getChildren())
+        return -self.visit(l[1])
 
     def visitPlusMinus (self, ctx):
         l = list(ctx.getChildren())
@@ -258,8 +260,6 @@ class TreeVisitor(FunxVisitor):
         varname = l[0].getText()
 
         if varname not in self.contexts[-1].keys():
-            print("ERROR: unkwown variable name \"{}\"".format(varname))
-            exit(1)
-        else:
-            return self.contexts[-1][varname]
+            raise Exception("ERROR: unkwown variable name \"{}\"".format(varname))
+        return self.contexts[-1][varname]
 

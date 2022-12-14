@@ -12,6 +12,9 @@ lexer = FunxLexer(input_stream)
 token_stream = CommonTokenStream(lexer)
 parser = FunxParser(token_stream)
 tree = parser.root()
-#print(tree.toStringTree(recog=parser))
+
 visitor = TreeVisitor()
-visitor.visit(tree)
+try:
+    visitor.visit(tree)
+except Exception as e:
+    print(e)
