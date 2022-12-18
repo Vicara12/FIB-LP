@@ -22,6 +22,18 @@ class TreeVisitor(FunxVisitor):
         self.infunction = False
         self.parsing_functions = True
 
+    def getFunctions(self):
+        # each item of functions holds:
+        # name of function, parameters, code in text format
+        functions = []
+        for key, val in self.functions.items():
+            # get all statements in the function
+            code = [x.getText() for x in val[1]]
+            functions.append((key[0],
+                              " ".join(val[0]),
+                              code))
+        return functions
+
     def visitRoot(self, ctx):
         childs = list(ctx.getChildren())
         self.parsing_functions = True

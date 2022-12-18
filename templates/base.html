@@ -1,9 +1,87 @@
-<html>
-    <head>
-        <title>Templating in Flask</title>
-    </head>
-    <body>
-        <h1>Hello {{ name }}!</h1>
-        <p>Welcome to the world of Flask!</p>
-    </body>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Funx interp</title>
+    <style>
+        body {
+            display: flex;
+            margin: 0;
+        }
+
+        p{
+            color: #FBFBFE;
+            font-family: system-ui;
+            font-size: 20px;
+            margin: 14px;
+        }
+
+        h1{
+            color: #769DFF;
+            font-size: 30px;
+            font-family: system-ui;
+            margin-left: 2%;
+        }
+
+        section {
+            display: inline-block;
+            width: 50%;
+            height: 100vh;
+            font-size: 14px;
+            word-wrap: break-word;
+        }
+
+        textarea {
+            id: "new_code";
+            name: "new_code";
+            background-color: #2B2A33;
+            color: #FBFBFE;
+            margin-left: 5%;
+            margin-right: 5%;
+            width: 90%;
+            height: 50%;
+            font-size: 17px;
+        }
+
+
+        /* left pannel */
+        section:nth-child(1) {
+            background-color: #1C1B22;
+        }
+
+        /* right pannel */
+        section:nth-child(2) {
+            background-color: #2B2A33;
+            overflow-y: auto;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- left pannel -->
+    <section>
+        <!-- new code section -->
+        <div style="position: relative; height: 30%;">
+            <h1> Funx code: </h1>
+            <textarea>
+                Enter code here...
+            </textarea>
+        </div>
+
+        <!-- functions section -->
+        <div>
+            <h1> Declared functions: </h1>
+        </div>
+        <p> Testing {{ name }} </p>
+    </section>
+
+    <!-- right pannel -->
+    <section>
+        <p> Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellendus, earum! </p>
+    </section>
+
+</body>
 </html>
