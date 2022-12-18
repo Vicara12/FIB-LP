@@ -9,3 +9,8 @@ all: Funx.g TreeVisitor.py funx.py
 	pycodestyle funx.py
 	@./tests.sh
 
+server:
+	./funx_interp.py
+	export FLASK_APP=funx_interp
+	flask run
+
