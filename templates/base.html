@@ -6,13 +6,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Funx interp</title>
     <style>
+
+        :root {
+            --blue: #0AA5E2;
+            --violet: #D25FA3;
+            --white: #FBFBFE;
+        }
+
         body {
             display: flex;
             margin: 0;
         }
 
         p{
-            color: #FBFBFE;
+            color: var(--white);
             font-family: system-ui;
             font-size: 20px;
             margin: 14px;
@@ -35,9 +42,8 @@
 
         textarea {
             id: "new_code";
-            name: "new_code";
             background-color: #2B2A33;
-            color: #FBFBFE;
+            color: var(--white);
             margin-left: 5%;
             margin-right: 5%;
             width: 90%;
@@ -58,23 +64,33 @@
         }
 
         .container {
-                width: 100%;
-                    height: 100%;
-                        display: flex;
-                            flex-direction: column;
-                                flex-wrap: nowrap;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            flex-wrap: nowrap;
         }
 
         header {
-                flex-shrink: 0;
+            flex-shrink: 0;
         }
         .body{
-                flex-grow: 1;
-                    overflow: auto;
-                        min-height: 2em;
+            flex-grow: 1;
+            overflow: auto;
+            min-height: 2em;
         }
-        footer{
-                flex-shrink: 0;
+
+        input {
+            margin: 1%;
+            margin-left: 3%;
+            position: absolute;
+            background: none;
+            color: var(--violet);
+            border: none;
+            outline: none;
+            text-decoration: underline;
+            font-size: 20px;
+            word-wrap: break-word;
         }
 
     </style>
@@ -84,18 +100,27 @@
     <!-- left pannel -->
     <section>
         <!-- new code section -->
-        <div style="position: relative; height: 30%;">
+        <div style="position: static; height: 40%;">
             <h1> Funx code </h1>
-            <textarea>
-                Enter code here...
-            </textarea>
+            <form action="/" method="post", id="code">
+                <textarea onfocus="if(this.value==this.defaultValue)this.value=''"
+            onblur="if(this.value=='')this.value=this.defaultValue"
+            form="code" name="codearea"> Enter code here...</textarea>
+                <input type="submit" name="submit" value="Execute" class=.exec>
+            </form>
+        </div>
+
+        <div>
+            <h1> Error log </h1>
         </div>
 
         <!-- functions section -->
         <div>
-            <h1> Declared functions </h1>
+            <header><h1> Declared functions </h1></header>
         </div>
-        <p> Testing {{ name }} </p>
+        <div class="body">
+            <p> Testing {{ name }} </p>
+        </div>
     </section>
 
     <!-- right pannel -->
