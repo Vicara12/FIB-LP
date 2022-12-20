@@ -7,6 +7,7 @@ all: Funx.g TreeVisitor.py funx.py
 	@echo " ~~~~ CHECKING CODE FORMAT ~~~~"
 	pycodestyle TreeVisitor.py
 	pycodestyle funx.py
+	pycodestyle app.py
 	@./tests.sh
 
 server:

@@ -21,8 +21,10 @@ class TreeVisitor(FunxVisitor):
         # anything
         self.infunction = False
         self.parsing_functions = True
+        self.output_to_buffer = False
+        self.output_buffer = []
 
-    def getFunctions(self):
+    def getFunctionText(self):
         # each item of functions holds:
         # name of function, parameters, code in text format
         functions = []
@@ -34,7 +36,26 @@ class TreeVisitor(FunxVisitor):
                               code))
         return functions
 
+    def setOutputToBuffer(self, output_to_buffer):
+        self.output_to_buffer = output_to_buffer
+
+    def writeOutput(self, text, newline):
+        if self.output_to_buffer:
+            if newline:
+                self.output_buffer.append(text)
+            else:
+                self.output_buffer[-1] += text
+        else:
+            if newline:
+                print(text)
+            else:
+                print(text, end='')
+
+    def getOutputBuffer(self):
+        return self.output_buffer
+
     def visitRoot(self, ctx):
+        self.output_buffer = []
         childs = list(ctx.getChildren())
         self.parsing_functions = True
         for i in childs:
@@ -118,11 +139,11 @@ class TreeVisitor(FunxVisitor):
         for item in childs[1:-1]:
             txt = item.getText()
             if txt[0] == '"':
-                print(txt[1:-1], end='')
+                self.writeOutput(txt[1:-1], False)
             else:
                 res = self.visit(item)
-                print(res, end='')
-        print()
+                self.writeOutput(res, False)
+        self.writeOutput("", True)
 
     def visitFuncall(self, ctx):
         childs = list(ctx.getChildren())
@@ -175,7 +196,7 @@ class TreeVisitor(FunxVisitor):
             raise Exception("LANGUAGE ERROR: non atomic statement")
         res = self.visit(childs[0])
         if not self.infunction and res is not None:
-            print("Out: {}".format(res))
+            self.writeOutput("Out: {}".format(res), True)
         return res
 
     def visitBVariable(self, ctx):
