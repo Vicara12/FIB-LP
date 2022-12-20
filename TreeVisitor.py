@@ -24,32 +24,28 @@ class TreeVisitor(FunxVisitor):
         self.output_to_buffer = False
         self.output_buffer = []
 
-    def getFunctionText(self):
-        # each item of functions holds:
-        # name of function, parameters, code in text format
-        functions = []
+    def getStatics(self):
+        # each item of statics holds a function or a variable
+        # in case of a function the format is:
+        # "Function", name of function, parameters
+        # in case of a variable the format is:
+        # "Variable", name of the variable, str(value)
+        statics = []
         for key, val in self.functions.items():
-            # get all statements in the function
-            code = [x.getText() for x in val[1]]
-            functions.append((key[0],
-                              " ".join(val[0]),
-                              code))
-        return functions
+            statics.append(("Function", key[0], " ".join(val[0])))
+
+        for name, val in self.contexts[-1].items():
+            statics.append(("Variable", name, str(val)))
+        return statics
 
     def setOutputToBuffer(self, output_to_buffer):
         self.output_to_buffer = output_to_buffer
 
-    def writeOutput(self, text, newline):
+    def writeOutput(self, text):
         if self.output_to_buffer:
-            if newline:
-                self.output_buffer.append(text)
-            else:
-                self.output_buffer[-1] += text
+            self.output_buffer.append(text)
         else:
-            if newline:
-                print(text)
-            else:
-                print(text, end='')
+            print(text)
 
     def getOutputBuffer(self):
         return self.output_buffer
@@ -136,14 +132,15 @@ class TreeVisitor(FunxVisitor):
 
     def visitPrint(self, ctx):
         childs = list(ctx.getChildren())
+        output = ""
         for item in childs[1:-1]:
             txt = item.getText()
             if txt[0] == '"':
-                self.writeOutput(txt[1:-1], False)
+                output += txt[1:-1]
             else:
                 res = self.visit(item)
-                self.writeOutput(res, False)
-        self.writeOutput("", True)
+                output += str(res)
+        self.writeOutput(output)
 
     def visitFuncall(self, ctx):
         childs = list(ctx.getChildren())
@@ -196,7 +193,7 @@ class TreeVisitor(FunxVisitor):
             raise Exception("LANGUAGE ERROR: non atomic statement")
         res = self.visit(childs[0])
         if not self.infunction and res is not None:
-            self.writeOutput("Out: {}".format(res), True)
+            self.writeOutput("Out: {}".format(res))
         return res
 
     def visitBVariable(self, ctx):

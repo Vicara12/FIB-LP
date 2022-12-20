@@ -115,7 +115,9 @@
             <header><h1> Declared functions </h1></header>
         </div>
         <div style="position: static" class="body">
-            <p> Testing {{ name }} </p>
+            {% for type, name, params in statics%}
+                <p> {{ type }}: {{ name }} {{ params }} </p>
+            {% endfor %}
         </div>
     </section>
 
@@ -124,7 +126,10 @@
         <div class="container">
             <header><h1> Results </h1></header>
             <div class="body">
-                <p> Command text </p>
+                {% for input, output in io_buffer %}
+                <p> Input: {{ input }} </p>
+                <p> Output: {{ output }} </p>
+                {% endfor %}
             </div>
     </section>
 

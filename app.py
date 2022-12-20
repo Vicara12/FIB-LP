@@ -25,10 +25,21 @@ class FunxExecuter:
         token_stream = CommonTokenStream(lexer)
         parser = FunxParser(token_stream)
         tree = parser.root()
-        self.tree_visitor.visit(tree)
-        self.io_buffer.append((code,
-                               "\n".join(self.tree_visitor.getOutputBuffer())))
-        print(self.io_buffer[-1])
+        try:
+            self.tree_visitor.visit(tree)
+            output = self.tree_visitor.getOutputBuffer()
+            if len(output) == 0:
+                output = ["None"]
+            self.io_buffer.append((code, "\n".join(output)))
+        except Exception as e:
+            self.io_buffer.append((code, e))
+
+    def getIObuffer(self):
+        return self.io_buffer
+
+    # statics are global context elements, aka functions and global variables
+    def getStatics(self):
+        return self.tree_visitor.getStatics()
 
 
 app = Flask(__name__)
@@ -37,9 +48,14 @@ funx_executer = FunxExecuter()
 
 @app.route('/', methods=['GET', 'POST'])
 def base():
+    # the user has introduced some code
     if request.method == 'POST':
         new_code = request.form["codearea"]
         funx_executer.execute(new_code)
-        return render_template('base.html', name="ok")
+        return render_template('base.html',
+                               name="ok",
+                               io_buffer=funx_executer.getIObuffer(),
+                               statics=funx_executer.getStatics())
+    # the user hasn't yet inserted any code
     else:
         return render_template('base.html', name="default")
