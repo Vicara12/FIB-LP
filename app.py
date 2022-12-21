@@ -56,8 +56,8 @@ def base():
         return render_template('base.html',
                                name="ok",
                                io_buffer=io_buffer[::-1],
-                               functions=functions,
-                               gVars=gVars)
+                               functions=functions[::-1],
+                               gVars=gVars[::-1])
     # the user hasn't yet inserted any code
     else:
         return render_template('base.html', name="default")

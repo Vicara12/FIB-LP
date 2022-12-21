@@ -34,14 +34,6 @@
             margin-left: 2%;
         }
 
-        section {
-            display: inline-block;
-            width: 50%;
-            height: 100vh;
-            font-size: 14px;
-            word-wrap: break-word;
-        }
-
         textarea {
             id: "new_code";
             background-color: #2B2A33;
@@ -53,14 +45,23 @@
             font-size: 17px;
         }
 
-
         /* left pannel */
-        section:nth-child(1) {
+        .sleft {
+            display: inline-block;
+            width: 50%;
+            height: 100vh;
+            font-size: 14px;
+            word-wrap: break-word;
             background-color: #1C1B22;
         }
 
         /* right pannel */
-        section:nth-child(2) {
+        .sright {
+            display: inline-block;
+            width: 50%;
+            height: 100vh;
+            font-size: 14px;
+            word-wrap: break-word;
             background-color: #2B2A33;
             overflow-y: auto;
         }
@@ -76,6 +77,7 @@
         header {
             flex-shrink: 0;
         }
+
         .body{
             flex-grow: 1;
             overflow: auto;
@@ -100,44 +102,46 @@
 <body>
 
     <!-- left pannel -->
-    <section>
+    <section class="sleft">
         <!-- new code section -->
-        <div style="position: static; height: 40%;">
+        <section style="height: 30%; width: 100%">
             <h1> Funx code </h1>
-            <form action="/" method="post", id="code">
+            <form action="/" method="post", id="code",
+                  style="height: 100%; width: 100%">
                 <textarea onfocus="if(this.value==this.defaultValue)this.value=''"
             onblur="if(this.value=='')this.value=this.defaultValue"
             form="code" name="codearea"> Enter code here...</textarea>
+                <br>
                 <input type="submit" name="submit" value="Execute" class=.exec>
             </form>
-        </div>
+        </section>
 
         <!-- functions section -->
-        <div style="position: static">
-            <header><h1> Declared functions </h1></header>
-        </div>
-        <div style="position: static" class="body">
-            <div>
-                {% for name, params in functions%}
-                    <p>         {{ name }}     {{ params }} </p>
-                {% endfor %}
+        <section style="height: 30%; width: 100%">
+            <div class="container">
+                <header><h1> Declared functions </h1></header>
+                <div style="position: static" class="body">
+                    {% for name, params in functions%}
+                    <p style="margin-left: 3%"> {{ name }}     <span style="color: var(--io_text); margin-left: 3%">{{ params }}</span> </p>
+                    {% endfor %}
+                </div>
             </div>
-        </div>
+        </section>
         <!-- global variables section -->
-        <div style="position: static">
-            <header><h1> Global variables </h1></header>
-        </div>
-        <div style="position: static" class="body">
-            <div>
-                {% for name, val in gVars%}
-                    <p>         {{ name }} = {{ val }} </p>
-                {% endfor %}
+        <section style="height: 30%; width: 100%">
+            <div class="container">
+                <header><h1> Global variables </h1></header>
+                <div style="position: static" class="body">
+                    {% for name, val in gVars%}
+                    <p style="margin-left: 3%"> {{ name }} = <span style="color: var(--io_text)">{{ val }}</span></p>
+                    {% endfor %}
+                </div>
             </div>
-        </div>
+        </section>
     </section>
 
     <!-- right pannel -->
-    <section>
+    <section class="sright">
         <div class="container">
             <header><h1> Results </h1></header>
             <div class="body">
