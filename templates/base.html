@@ -11,6 +11,8 @@
             --blue: #0AA5E2;
             --violet: #D25FA3;
             --white: #FBFBFE;
+            --output_bgnd: #42414D;
+            --io_text: #E78E3C;
         }
 
         body {
@@ -115,9 +117,22 @@
             <header><h1> Declared functions </h1></header>
         </div>
         <div style="position: static" class="body">
-            {% for type, name, params in statics%}
-                <p> {{ type }}: {{ name }} {{ params }} </p>
-            {% endfor %}
+            <div>
+                {% for name, params in functions%}
+                    <p>         {{ name }}     {{ params }} </p>
+                {% endfor %}
+            </div>
+        </div>
+        <!-- global variables section -->
+        <div style="position: static">
+            <header><h1> Global variables </h1></header>
+        </div>
+        <div style="position: static" class="body">
+            <div>
+                {% for name, val in gVars%}
+                    <p>         {{ name }} = {{ val }} </p>
+                {% endfor %}
+            </div>
         </div>
     </section>
 
@@ -127,8 +142,24 @@
             <header><h1> Results </h1></header>
             <div class="body">
                 {% for input, output in io_buffer %}
-                <p> Input: {{ input }} </p>
-                <p> Output: {{ output }} </p>
+                <div style="background-color: var(--output_bgnd);
+                             margin: 2%;">
+
+                    <div style="height: 5%"></div>
+                    <p style="margin= 0%;
+                       color: var(--io_text)"> Input: </p>
+                    <p style="margin: 0%;
+                        margin-left: 5%">{{ input }}</p>
+
+                    <p style="margin= 0%;
+                        color: var(--io_text)"> Output: </p>
+                    {% for o in output %}
+                        <p style="margin: 0%;
+                            margin-left: 5%">{{ o }}</p>
+                    {% endfor %}
+                    <div style="height: 5%"></div>
+
+                </div>
                 {% endfor %}
             </div>
     </section>

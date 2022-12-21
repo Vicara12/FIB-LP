@@ -24,19 +24,21 @@ class TreeVisitor(FunxVisitor):
         self.output_to_buffer = False
         self.output_buffer = []
 
-    def getStatics(self):
-        # each item of statics holds a function or a variable
-        # in case of a function the format is:
-        # "Function", name of function, parameters
-        # in case of a variable the format is:
-        # "Variable", name of the variable, str(value)
-        statics = []
+    def getFunctions(self):
+        # the format is:
+        # name of function, parameters
+        functions = []
         for key, val in self.functions.items():
-            statics.append(("Function", key[0], " ".join(val[0])))
+            functions.append((key[0], " ".join(val[0])))
+        return functions
 
+    def getGlobVars(self):
+        # the format is:
+        # name of the variable, value
+        variables = []
         for name, val in self.contexts[-1].items():
-            statics.append(("Variable", name, str(val)))
-        return statics
+            variables.append((name, str(val)))
+        return variables
 
     def setOutputToBuffer(self, output_to_buffer):
         self.output_to_buffer = output_to_buffer
@@ -193,7 +195,13 @@ class TreeVisitor(FunxVisitor):
             raise Exception("LANGUAGE ERROR: non atomic statement")
         res = self.visit(childs[0])
         if not self.infunction and res is not None:
-            self.writeOutput("Out: {}".format(res))
+            # if the output is for the webpage there is no need
+            # to add the word output, as it will be added in
+            # the HTML
+            if self.output_to_buffer:
+                self.writeOutput(str(res))
+            else:
+                self.writeOutput("Out: {}".format(res))
         return res
 
     def visitBVariable(self, ctx):
