@@ -296,4 +296,6 @@ To execute the unit tests, just execute tests.sh script. This script is also aut
 
 Finally, a web interpreter for the language is also available.
 
+![Funx interpreter web interface](interface.png)
+
 The interpreter is divided in four sections. In the upper left corner there is a text area where new code can be inserted and executed. The results will be shown in the scrollable section at its right, where the most recent ones are shown above. The other two sections, located below the new code area are the declared functions and global variables section. These two sections are also scrollable and show most recently declared functions first.
